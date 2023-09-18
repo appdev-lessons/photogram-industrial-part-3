@@ -307,13 +307,13 @@ With that conditional, if we return to our live app, then we should only see the
 
 Now's a good time to commit!
 
-## Flaw in `sample_data` 00:20:30 to 00:23:00
+## Flaw in `sample_data`
 
 On the "Sign in" page, it would be good if we knew one of our user accounts, so that we could log right in and keep testing the app. This is a flaw in our sample data task, so let's correct it now.
 
 We'll do that by adding a known user to our sample data:
 
-```ruby
+```ruby{16,18-20,22,24}
 # lib/tasks/dev.rake
 
 desc "Fill the database tables with some sample data"
@@ -342,9 +342,8 @@ task sample_data: :environment do
       private: [true, false].sample,
     )
   end
-...
+# ...
 ```
-{: mark_lines="16 18-19 20 22 24"}
 
 We created an array of usernames, added some known values to it (`"alice"` and `"bob"`), and used that to generate users.
 
@@ -356,7 +355,7 @@ Working? Do we see the edit and sign out links now? Good! Time to commit.
 g acm "Better sample data"
 ```
 
-And we should push this branch up to github for safe keeping, and for getting on a PR:
+And we should push this branch up to github for safe keeping, and for opening a PR:
 
 ```
 git push --set-upstream origin rb-starting-on-ui
@@ -364,38 +363,37 @@ git push --set-upstream origin rb-starting-on-ui
 
 (Subsequent pushes can be done with `g p`. The `--set-upstream` flag was just for the first push.)
 
-## Force Sign In 00:23:00 to 00:24:30
+## Force sign in
 
-Our navbar, including the devise links, is in good shape. 
+Our navbar is in good shape. 
 
 Let's force that somebody is signed in to view anything else, because I'm going to start to modify all of my pages, and I'm going to assume that there's someone signed in so that I can start calling methods on `current_user`.
 
 We don't want to put `user_signed_in?` combined with conditionals all over the app. Rather, let's add a force sign in to the `ApplicationController`:
 
-```ruby
+```ruby{4}
 # app/controllers/application_controller.rb
 
 class ApplicationController < ActionController::Base
   before_action :authenticate_user!
 end
 ```
-{: mark_lines="4"}
 
-We use the method `before_action` to call the method `:authenticate_user!`. This method is again provided by devise, and it's more secure than the `force_user_sign_in` action that we defined in AD1. 
+We use the method `before_action` to call the method `:authenticate_user!`, provided by Devise.
 
-Now if you sign out in the live app and try to navigate to any of the index pages, you should be forced back to the log in page. But it would also be nice to have some flash messages to explain why the user can't move around without signing in.
+Now if you sign out in the live app and try to navigate to any of the index pages, you should be forced back to the log in page. But it would also be nice to have some flash messages to explain why the user can't move around without signing in!
 
-## Flash Messages 00:24:30 to 00:29:00
+## Flash messages
 
 We'll add flash messages as usual with partials in the application layout and [Bootstrap alert boxes](https://getbootstrap.com/docs/4.6/components/alerts/) in the partial file.
 
-We can use some [dismissable flash messages](https://getbootstrap.com/docs/4.6/components/alerts/#dismissing) as well, so the message can closed by the user if they want.
+We can use some [dismissable flash messages](https://getbootstrap.com/docs/4.6/components/alerts/#dismissing) as well, so the message can be closed by the user if they want.
 
 We might note that the difference between the alert code comes down to putting `alert` vs. `notice` in the body of the message, and changing the class to `danger` vs. `success`. That means, we can get a little fancy, and use some local variables in our partial.
 
 Starting with the copy-pasted, then modified partial `_flash.html.erb` that we create in the `app/views/shared/` folder:
 
-```erb
+```erb{3,4}
 <!-- app/views/shared/_flash.html.erb -->
 
 <div class="alert alert-<%= css_class %> alert-dismissible fade show" role="alert">
@@ -405,16 +403,15 @@ Starting with the copy-pasted, then modified partial `_flash.html.erb` that we c
   </button>
 </div>
 ```
-{: mark_lines="3 4"}
 
 We will pass the type of alert box in with `<%= css_class %>` and the message in with `<%= message %>`.
 
 Now in the application layout file, we can add those alerts with some conditional statements:
 
-```erb
+```erb{9-11,13-15}
 <!-- app/views/layouts/application.html.erb -->
 
-...
+<!-- ... -->
   <body>
 
     <%= partial "shared/navbar" %>
@@ -433,17 +430,15 @@ Now in the application layout file, we can add those alerts with some conditiona
   </body>
 </html>
 ```
-{: mark_lines="9-11 13-15"}
 
 Try the live app again and see the dismissable alerts in action. We probably want some breathing room though, because they're pressed up on the navbar right now. Let's just add a quick margin bottom `mb` to the navbar container:
 
-```erb
+```erb{3:(59-62)}
 <!-- app/views/shared/_navbar.html.erb -->
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
-  ...
+  <!-- ... -->
 ```
-{: mark_lines="3"}
 
 Finally, our view templates that came with `scaffold` (like `app/views/photos/index.html.erb`) have some code at the top:
 
@@ -466,4 +461,3 @@ g p
 ```
 
 Now that we have Bootstrap styling, a navbar to get around, forced user sign in to ensure that `current_user` is not `nil`, and alert messages, we are ready to confidently build out the rest of our app.
-
