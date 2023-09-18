@@ -17,22 +17,22 @@ Did you read the differences above? Good! Then [here is a walkthrough video for 
 
 ## Getting started
 
-Let's continue with the `photogram-industrial`, keeping in mind a rough target to work towards:
+Let's continue with `photogram-industrial`, keeping in mind a rough target to work towards:
 
 [pg-industrial-2-final.herokuapp.com](https://pg-industrial-2-final.herokuapp.com/)
 
-So navigate to `github.com/codespaces` (or reopen the previous lesson and use the "Load assignment" button) and reopen your `photogram-industrial` project codespace to continue building on what you accomplished in _Photogram Industrial Parts 1 and 2_.
+So navigate to `github.com/codespaces` and reopen your `photogram-industrial` codespace to continue building on what you accomplished in _Photogram Industrial Parts 1 and 2_.
 
-## Starting on the interface 00:00:00 to 00:04:00
+## Starting on the interface
 
-Now that we have our backend in a great place, let's keep going with Photogram Industrial, and launch into building the interface. With our our sample data and association accessor methods at our fingertips, you'll see that building out the interface is going to be a breeze. 
+Now that we have our backend in a great place, let's launch into building the interface. With our sample data and association accessor methods at our fingertips, you'll see that building out the interface is going to be a breeze. 
 
 The first thing we're going to do is create a new git branch for our work.
 
 First, run a `git status` (or, as we've set it up, just `g`), to see what branch you're on:
 
 ```
-gitpod /workspace/photogram-industrial:(rb-photogram-industrial-2) $ g
+% g
 On branch rb-photogram-industrial-2
 Your branch is up to date with 'origin/rb-photogram-industrial-2'.
 
@@ -44,18 +44,20 @@ I'm currently on the branch where we built out our whole backend: `rb-photogram-
 At the terminal, we'll `git checkout -b <branch-name>`, or just `g cob` for short:
 
 ```
-gitpod /workspace/photogram-industrial:(rb-photogram-industrial-2) $ git cob rb-starting-on-ui 
+main % git cob rb-starting-on-ui 
 Switched to a new branch 'rb-starting-on-ui'
-gitpod /workspace/photogram-industrial:(rb-starting-on-ui) $
+rb-starting-on-ui %
 ```
 
 The bottom line is: branches are easy to create and cheap. If you branch off of another branch, you can easily merge them later on, because they share the same history. (Merging becomes slightly more involved if you make additional commits to the parent branch, causing the histories to diverge.)
 
-Once you're on the new branch, get the app running with `bin/dev`. As we work, we'll keep in mind the [Photogram final target](https://pg-industrial-2-final.herokuapp.com/) as our target interface. 
+Once you're on the new branch, get the app running with `bin/dev`. As we work, we'll keep in mind the target interface:
+
+[pg-industrial-2-final.herokuapp.com](https://pg-industrial-2-final.herokuapp.com/)
 
 We haven't done anything to the interface yet, so let's begin by giving ourselves a root route in `routes.rb`:
 
-```ruby
+```ruby{4}
 # config/routes.rb
 
 Rails.application.routes.draw do
@@ -67,42 +69,35 @@ Rails.application.routes.draw do
   resources :follow_requests
   resources :likes
   resources :photos
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
 ```
-{: mark_lines="4"}
 
-Also, I've changed the ordering of the routes. I usually keep the root route at the top, followed by the Devise routes. My convention is to alphabetize the routes, unless it's something particularly important, like Devise. It's worth noting, routes are matched top-down, so if there are conflicting routes (e.g., **/movies/new** and **/movies/:id**), the more specific route should be above the more general.
+Also, I've changed the ordering of the routes. I usually keep the root route at the top, followed by the Devise routes. My convention is to alphabetize the routes, unless it's something particularly important, like Devise. It's worth noting, routes are matched top-down, so if there are conflicting routes (e.g., `/movies/new` and `/movies/:id`), the more specific route should be above the more general.
 
-Now we can visit **/** in our app, which should show us the photo index page. We have the `sample_data` task written, so run that with `rake sample_data`. If there wasn't already, you'll now see a bunch of diverse data in the app for us to look at as we build out the interface.
+Now we can visit `/` in our live app preview, which should show us the photo index page. We have the `sample_data` task written, so run that with `rake sample_data`. If there wasn't already, you'll now see a bunch of diverse data in the app for us to look at as we build out the interface.
 
 You may note that there is already some styling of the page. That's because we used `scaffold`s to generate our resources, and that added the file `app/assets/stylesheets/scaffolds.scss` (and individual, but empty files for each resource, like `photos.scss`). We're going to be using Bootstrap, so you can delete `scaffolds.scss` now.
 
+<div class="bg-red-100 py-1 px-5" markdown="1">
+
+In the more recent version of the project, we disabled the scaffold default CSS file generation, so you shouldn't need to delete anything.
+</div>
+
 <aside markdown="1">
-As opposed to AD1, in AD2, Bootstrap is the minimum styling we want to add to anything we build. Then we could hand craft styles on top of that with actual CSS. Nowadays, handcrafting styles actually means that we would use something like [Tailwind CSS](https://tailwindcss.com/), which is a lower-level framework than Bootstrap. Tailwind gives you utility classes, from which you craft your own components.
+
+From now on, Bootstrap is the minimum styling we want to add to anything we build. Then we could hand craft styles on top of that with actual CSS. Nowadays, handcrafting styles actually means that we would use something like [Tailwind CSS](https://tailwindcss.com/), which is a lower-level framework than Bootstrap. Tailwind gives you utility classes, from which you craft your own components.
 </aside>
 
-Please note that we're using Bootstrap v4 in the video. The official Bootstrap docs now show v5 by default, so when referring to the docs, you should switch to [v4.6 using the dropdown in the top-right](https://getbootstrap.com/docs/4.6/getting-started/introduction/).
+Please note that we're using Bootstrap v4 in the video. The official Bootstrap docs now show v5 by default, so when referring to the docs, you can switch to [v4.6 using the dropdown in the top-right](https://getbootstrap.com/docs/4.6/getting-started/introduction/). However, this isn't strictly necessary and you should be able to use the most up-to-date bootstrap version in your project without getting confused.
 
-## Application Layout 00:04:00 to 00:11:00
+## Application layout
 
 Let's begin by giving ourselves some navigation. We'll put this in the application layout, and, because we want to keep our code organized and modular, we'll use a partial:
 
-```erb
+```erb{6}
 <!-- app/views/layouts/application.html.erb -->
 
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>VanillaRails</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
-
-    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
-  </head>
-
+<!-- ... -->
   <body>
 
     <%= partial "shared/navbar" %>
@@ -111,7 +106,6 @@ Let's begin by giving ourselves some navigation. We'll put this in the applicati
   </body>
 </html>
 ```
-{: mark_lines="17"}
 
 Create that folder and file: `app/views/shared/_navbar.html.erb` (don't forget the underscore on `_navbar` in the filename).
 
@@ -121,35 +115,24 @@ We see something popped up, but it looks like there's no styling on the page now
 
 We forgot to include the external stylesheet link to Bootstrap! Let's also add that CDN stuff as a partial to our application layout:
 
-```erb
+```erb{14}
 <!-- app/views/layouts/application.html.erb -->
 
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <title>VanillaRails</title>
+    <title>Photogram Industrial</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
 
     <%= render partial: "shared/cdn_assets" %>
   </head>
-
-  <body>
-
-    <%= partial "shared/navbar" %>
-
-    <%= yield %>
-  </body>
-</html>
+<!-- ... -->
 ```
-{: mark_lines="6 15"}
-
-(Note: We also added the `<meta charset="utf-8">` at the top of the `<head>` before any other HTML.)
 
 And in the `app/views/shared/_cdn_assets.html.erb`, we can plop in our stylesheets:
 
@@ -157,22 +140,21 @@ And in the `app/views/shared/_cdn_assets.html.erb`, we can plop in our styleshee
 <!-- app/views/shared/_cdn_assets.html.erb -->
 
 <!-- Connect Bootstrap CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
 
 <!-- Connect Bootstrap JavaScript and its dependencies -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
 
 <!-- Connect Font Awesome -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
 ```
-{: mark_lines="17"}
 
 Now refresh the live app, and we should see the correctly styled page with the navbar we added. Let's also quickly put the `yield` statement in a container to give our page some breathing room:
 
-```erb
+```erb{8-10}
 <!-- app/views/layouts/application.html.erb -->
 
-...
+<!-- ... -->
   <body>
 
     <%= partial "shared/navbar" %>
@@ -184,50 +166,32 @@ Now refresh the live app, and we should see the correctly styled page with the n
   </body>
 </html>
 ```
-{: mark_lines="8-10"}
 
 Let's make a git commit, perhaps: `g acm "Added navbar and CDN assets"`.
 
-## Starting Navbar Styling 00:11:00 to 00:15:30
+## Starting navbar styling
 
-Next, we'll need to make some changes to that copy-pasted navbar to suit our purposes. We want to avoid `<a>` elements, because have our `link_to` helper method. We can start by changing the homepage link at the top of the navbar:
+Next, we'll need to make some changes to that copy-pasted navbar to suit our purposes. We want to avoid `<a>` elements, because we have our `link_to` helper method. We can start by changing the homepage link at the top of the navbar:
 
-```erb
+```erb{4-5}
 <!-- app/views/shared/_navbar.html.erb -->
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <!-- <a class="navbar-brand" href="#">Navbar</a> -->
   <%= link_to "Photogram", root_path, class: "navbar-brand" %>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
-      ...
+  
+  <!-- ... -->
 </nav>
 ```
-{: mark_lines="4-5"}
 
 From here, my goal is to have the "Dropdown" menu contain all of the resources (their index pages will be fine), and for the sign in links to be on the right side of the navbar where the "Search" currently is. 
 
 For the "Dropdown" menu, we just want some quick and dirty links to help us navigate, so I won't worry about using `link_to`. Here's how your navbar should look for the dropdown menu:
 
-```erb
-<!-- app/views/shared/_navbar.html.erb -->
-
+```erb{5-14}
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <%= link_to "Photogram", root_path, class: "navbar-brand" %>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
+    <!-- ... -->
+    
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item dropdown">
@@ -242,29 +206,25 @@ For the "Dropdown" menu, we just want some quick and dirty links to help us navi
           </div>
         </li>
       </ul>
-      ...
+      <!-- ... -->
 ```
-{: mark_lines="13-21"}
 
 Try out the dropdown links from the "Resources" navbar button. Can you reach the index pages for each resource? Do you see the data from `sample_data`?
 
 It might also be nice to add some padding to the navbar text so it's in-line with our other page content. We can do that by wrapping all of the _content_ of our navbar in another `div.container`:
 
-```erb
-<!-- app/views/shared/_navbar.html.erb -->
-
+```erb{2,5}
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container">
     <%= link_to "Photogram", root_path, class: "navbar-brand" %>
-      ...
+      <!-- ... -->
   </div>
 </nav>
 ```
-{: mark_lines="4 7"}
 
 Why not make a commit?
 
-## User Account Links 00:15:30 to 00:20:30
+## User account links
 
 We would also like some user account links (sign in, sign out, etc.) as implemented by devise. Devise gives us a number of route helpers for these special paths. You can examine them with `rails routes`. The important items are:
 
@@ -275,16 +235,16 @@ We would also like some user account links (sign in, sign out, etc.) as implemen
 
 We can start this by adding the `"nav-item"`s in an unstructured list at the end of the navbar, in place of the "Search" form:
 
-```erb
+```erb{4-17}
 <!-- app/views/shared/_navbar.html.erb -->
 
-...
+<!-- ... -->
       <ul class="navbar-nav">
         <li class="nav-item">
           <%= link_to "Edit profile", edit_user_registration_path, class: "nav-link" %>
         </li>
         <li class="nav-item">
-          <%= link_to "Sign out", destroy_user_session_path, method: :delete, class: "nav-link" %>
+          <%= link_to "Sign out", destroy_user_session_path, data: { turbo_method: :delete }, class: "nav-link" %>
         </li>
         <li class="nav-item">
           <%= link_to "Sign in", new_user_session_path, class: "nav-link" %>
@@ -297,20 +257,26 @@ We can start this by adding the `"nav-item"`s in an unstructured list at the end
   </div>
 </nav>
 ```
-{: mark_lines="4-17"}
 
-For the "Sign out" link last in the list, we also needed to add the option `method: :delete`, because this is a DELETE HTTP request.
+For the "Sign out" link, we also needed to add the option `data: { turbo_method: :delete }`, because this is a DELETE HTTP request.
 
-Try out the navbar links. Everything working? Well, the links should work, but we need to add some conditionals here. The user should see different links depending on whether they are signed in or not. \
+<div class="bg-red-100 py-1 px-5" markdown="1">
 
-Peviously, we defined an instance variable `@current_user` to use throughout our app. With devise, a helper method has been defined cvalled `current_user`. In general, it's better to avoid re-used instance variables throughout our app by using helper methods that read and use a given instance variable. That's why devise gives us `current_user`.
+In the video, I use `method: :delete`; due to the Rails 7 update, you should be using `data: { turbo_method: :delete }`.
+</div>
+
+Try out the navbar links. Everything working? 
+
+The links should work, but we need to add some conditionals here. The user should see different links depending on whether they are signed in or not.
+
+With devise, a helper method has been defined called `current_user`. In general, it's better to avoid re-used instance variables throughout our app by using helper methods that read and use a given instance variable. That's why devise gives us `current_user`.
 
 What we would normally do is something like: `if current_user.present?`. In fact, devise gives us another helper method for that chained code, which reads somewhat better: `if user_signed_in?`, so let's use that:
 
-```erb
+```erb{5,7:(26-54),13,21}
 <!-- app/views/shared/_navbar.html.erb -->
 
-...
+<!-- ... -->
       <ul class="navbar-nav">
         <% if user_signed_in? %>
           <li class="nav-item">
@@ -334,7 +300,6 @@ What we would normally do is something like: `if current_user.present?`. In fact
   </div>
 </nav>
 ```
-{: mark_lines="5 7 13 21"}
 
 We also added the `current_user`s username to the "Edit profile" copy, to give us some additional visual notice that we're signed in.
 
