@@ -11,7 +11,7 @@
 - I use `rails sample_data`, _you_ should use `rake sample_data`
 </div>
 
-Did you read the differences above? Good! Then [here is a walkthrough video for this project.](https://share.descript.com/view/P3PGeVSVtMW )
+Did you read the differences above? Good! Then [here is a walkthrough video for this project.](https://share.descript.com/view/KkN3XUdeop3)
 
 **As you watch the video, pause it frequently, read the associated text, and type out the code.**
 
