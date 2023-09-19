@@ -125,11 +125,12 @@ We forgot to include the external stylesheet link to Bootstrap! Let's also add t
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    
+    <%= render partial: "shared/cdn_assets" %>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
 
-    <%= render partial: "shared/cdn_assets" %>
   </head>
 <!-- ... -->
 ```
