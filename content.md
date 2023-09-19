@@ -314,7 +314,7 @@ On the "Sign in" page, it would be good if we knew one of our user accounts, so 
 
 We'll do that by adding a known user to our sample data:
 
-```ruby{16,18-20,22,24}
+```ruby{16-28}
 # lib/tasks/dev.rake
 
 desc "Fill the database tables with some sample data"
@@ -343,6 +343,9 @@ task sample_data: :environment do
       private: [true, false].sample,
     )
   end
+
+  12.times do
+    name = Faker::Name.first_name
 # ...
 ```
 
