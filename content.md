@@ -398,9 +398,7 @@ Starting with the copy-pasted, then modified partial `_flash.html.erb` that we c
 
 <div class="alert alert-<%= css_class %> alert-dismissible fade show" role="alert">
   <%= message %>
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 ```
 
@@ -418,13 +416,13 @@ Now in the application layout file, we can add those alerts with some conditiona
 
     <div class="container">
       <% if notice.present? %>
-        <%= render partial: "shared/flash", message: notice, css_class: "success" %>
+        <%= render partial: "shared/flash", locals: { message: notice, css_class: "success" } %>
       <% end %>
       
       <% if alert.present? %>
-        <%= render partial: "shared/flash", message: alert, css_class: "danger" %>
+        <%= render partial: "shared/flash", locals: { message: alert, css_class: "danger" } %>
       <% end %>
-      
+
       <%= yield %>
     </div>
   </body>
