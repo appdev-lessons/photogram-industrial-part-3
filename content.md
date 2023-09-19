@@ -100,7 +100,7 @@ Let's begin by giving ourselves some navigation. We'll put this in the applicati
 <!-- ... -->
   <body>
 
-    <%= partial "shared/navbar" %>
+    <%= render partial: "shared/navbar" %>
 
     <%= yield %>
   </body>
@@ -157,7 +157,7 @@ Now refresh the live app, and we should see the correctly styled page with the n
 <!-- ... -->
   <body>
 
-    <%= partial "shared/navbar" %>
+    <%= render partial: "shared/navbar" %>
 
     <div class="container">
       <%= yield %>
@@ -414,15 +414,15 @@ Now in the application layout file, we can add those alerts with some conditiona
 <!-- ... -->
   <body>
 
-    <%= partial "shared/navbar" %>
+    <%= render partial: "shared/navbar" %>
 
     <div class="container">
       <% if notice.present? %>
-        <%= partial "shared/flash", message: notice, css_class: "success" %>
+        <%= render partial: "shared/flash", message: notice, css_class: "success" %>
       <% end %>
       
       <% if alert.present? %>
-        <%= partial "shared/flash", message: alert, css_class: "danger" %>
+        <%= render partial: "shared/flash", message: alert, css_class: "danger" %>
       <% end %>
       
       <%= yield %>
