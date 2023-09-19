@@ -19,7 +19,7 @@ Did you read the differences above? Good! Then [here is a walkthrough video for 
 
 Let's continue with `photogram-industrial`, keeping in mind a rough target to work towards:
 
-[pg-industrial-2-final.herokuapp.com](https://pg-industrial-2-final.herokuapp.com/)
+[photogram-industrial.matchthetarget.com](https://photogram-industrial.matchthetarget.com/)
 
 So navigate to `github.com/codespaces` and reopen your `photogram-industrial` codespace to continue building on what you accomplished in _Photogram Industrial Parts 1 and 2_.
 
@@ -53,7 +53,7 @@ The bottom line is: branches are easy to create and cheap. If you branch off of 
 
 Once you're on the new branch, get the app running with `bin/dev`. As we work, we'll keep in mind the target interface:
 
-[pg-industrial-2-final.herokuapp.com](https://pg-industrial-2-final.herokuapp.com/)
+[photogram-industrial.matchthetarget.com](https://photogram-industrial.matchthetarget.com/)
 
 We haven't done anything to the interface yet, so let's begin by giving ourselves a root route in `routes.rb`:
 
