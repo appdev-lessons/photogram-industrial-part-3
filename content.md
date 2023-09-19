@@ -283,7 +283,7 @@ What we would normally do is something like: `if current_user.present?`. In fact
             <%= link_to "Edit #{current_user.username}", edit_user_registration_path, class: "nav-link" %>
           </li>
           <li class="nav-item">
-            <%= link_to "Sign out", destroy_user_session_path, method: :delete, class: "nav-link" %>
+            <%= link_to "Sign out", destroy_user_session_path, data: { turbo_method: :delete }, class: "nav-link" %>
           </li>
 
         <% else %>
