@@ -115,7 +115,7 @@ We see something popped up, but it looks like there's no styling on the page now
 
 We forgot to include the external stylesheet link to Bootstrap! Let's also add that CDN stuff as a partial to our application layout:
 
-```erb{14}
+```erb{11}
 <!-- app/views/layouts/application.html.erb -->
 
 <!DOCTYPE html>
