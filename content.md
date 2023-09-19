@@ -81,14 +81,14 @@ You may note that there is already some styling of the page. That's because we u
 <div class="bg-red-100 py-1 px-5" markdown="1">
 
 In the more recent version of the project, we disabled the scaffold default CSS file generation, so you shouldn't need to delete anything.
+
+Also, note that we're using Bootstrap version 4 in the video. The official Bootstrap docs now show v5 by default. Links and code contained in this document are based on the version 5 Bootstrap.
 </div>
 
 <aside markdown="1">
 
 From now on, Bootstrap is the minimum styling we want to add to anything we build. Then we could hand craft styles on top of that with actual CSS. Nowadays, handcrafting styles actually means that we would use something like [Tailwind CSS](https://tailwindcss.com/), which is a lower-level framework than Bootstrap. Tailwind gives you utility classes, from which you craft your own components.
 </aside>
-
-Please note that we're using Bootstrap v4 in the video. The official Bootstrap docs now show v5 by default. Links and code contained in this document are based on the version 5 Bootstrap.
 
 ## Application layout
 
