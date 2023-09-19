@@ -88,7 +88,7 @@ In the more recent version of the project, we disabled the scaffold default CSS 
 From now on, Bootstrap is the minimum styling we want to add to anything we build. Then we could hand craft styles on top of that with actual CSS. Nowadays, handcrafting styles actually means that we would use something like [Tailwind CSS](https://tailwindcss.com/), which is a lower-level framework than Bootstrap. Tailwind gives you utility classes, from which you craft your own components.
 </aside>
 
-Please note that we're using Bootstrap v4 in the video. The official Bootstrap docs now show v5 by default, so when referring to the docs, you can switch to [v4.6 using the dropdown in the top-right](https://getbootstrap.com/docs/4.6/getting-started/introduction/). However, this isn't strictly necessary and you should be able to use the most up-to-date bootstrap version in your project without getting confused.
+Please note that we're using Bootstrap v4 in the video. The official Bootstrap docs now show v5 by default. Links and code contained in this document are based on the version 5 Bootstrap.
 
 ## Application layout
 
@@ -109,7 +109,7 @@ Let's begin by giving ourselves some navigation. We'll put this in the applicati
 
 Create that folder and file: `app/views/shared/_navbar.html.erb` (don't forget the underscore on `_navbar` in the filename).
 
-With that file open, fill it with the [Bootstrap kitchen sink example](https://getbootstrap.com/docs/4.6/components/navbar/). Now go back to the live app and see if it worked.
+With that file open, fill it with the [Bootstrap kitchen sink example](https://getbootstrap.com/docs/5.2/components/navbar/). Now go back to the live app and see if it worked.
 
 We see something popped up, but it looks like there's no styling on the page now. Why?
 
@@ -385,9 +385,9 @@ Now if you sign out in the live app and try to navigate to any of the index page
 
 ## Flash messages
 
-We'll add flash messages as usual with partials in the application layout and [Bootstrap alert boxes](https://getbootstrap.com/docs/4.6/components/alerts/) in the partial file.
+We'll add flash messages as usual with partials in the application layout and [Bootstrap alert boxes](https://getbootstrap.com/docs/5.2/components/alerts/) in the partial file.
 
-We can use some [dismissable flash messages](https://getbootstrap.com/docs/4.6/components/alerts/#dismissing) as well, so the message can be closed by the user if they want.
+We can use some [dismissable flash messages](https://getbootstrap.com/docs/5.2/components/alerts/#dismissing) as well, so the message can be closed by the user if they want.
 
 We might note that the difference between the alert code comes down to putting `alert` vs. `notice` in the body of the message, and changing the class to `danger` vs. `success`. That means, we can get a little fancy, and use some local variables in our partial.
 
